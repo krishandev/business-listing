@@ -1,4 +1,5 @@
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 import { MapPin, Search, Star, Phone, Store, Utensils, Smartphone, Scissors } from "lucide-react";
 import { connectDB } from "@/lib/db";
 import Business from "@/models/Business";
