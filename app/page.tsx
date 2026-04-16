@@ -45,7 +45,7 @@ export default async function HomePage() {
   await connectDB();
 
   const businesses = await Business.find()
-    .select("name slug description city phone category image rating reviewCount")
+    .select("name slug description city phone category logoUrl shopFrontImageUrl rating reviewCount")
     .sort({ createdAt: -1 })
     .limit(6)
     .lean();
@@ -251,13 +251,28 @@ export default async function HomePage() {
                 className="group overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
               >
                 <div className="relative h-52 bg-gradient-to-br from-green-100 to-green-200">
-                  {biz.image ? (
+                  {/* {biz.image ? (
                     <img
                       src={biz.image}
                       alt={biz.name}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
-                  ) : (
+                  ) : ( */}
+                  {biz.shopFrontImageUrl ? (
+  <img
+    src={biz.shopFrontImageUrl}
+    alt={biz.name}
+    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+  />
+) : biz.logoUrl ? (
+  <div className="flex h-full items-center justify-center bg-white p-6">
+    <img
+      src={biz.logoUrl}
+      alt={`${biz.name} logo`}
+      className="max-h-24 max-w-[140px] object-contain"
+    />
+  </div>
+) : (
                     <div className="flex h-full items-center justify-center text-[#468432]">
                       <Store className="h-16 w-16" />
                     </div>

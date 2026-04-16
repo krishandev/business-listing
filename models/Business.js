@@ -10,6 +10,8 @@ const BusinessSchema = new mongoose.Schema(
     email: String,
     address: String,
     website: String,
+    logoUrl: String,
+    shopFrontImageUrl: String,
 
     category: String,
     city: String,

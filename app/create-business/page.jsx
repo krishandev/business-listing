@@ -13,6 +13,8 @@ export default function CreateBusiness() {
     category: "",
     description: "",
     services: "",
+    logoUrl: "",
+  shopFrontImageUrl: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -103,6 +105,25 @@ export default function CreateBusiness() {
             onChange={handleChange}
             className="border p-3 rounded-md focus:ring-2 focus:ring-[#9AD872]"
           />
+
+          {/* Logo URL */}
+<input
+  type="url"
+  name="logoUrl"
+  placeholder="Logo Image URL"
+  onChange={handleChange}
+  className="border p-3 rounded-md focus:ring-2 focus:ring-[#9AD872]"
+/>
+
+{/* Shop Front Image URL */}
+<input
+  type="url"
+  name="shopFrontImageUrl"
+  placeholder="Shop Front Image URL"
+  onChange={handleChange}
+  className="border p-3 rounded-md focus:ring-2 focus:ring-[#9AD872]"
+/>
+
 
           {/* Address */}
           <input

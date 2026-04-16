@@ -44,6 +44,8 @@ export async function POST(req) {
       address: body.address || "",
       city: body.city || "",
       website: body.website || "",
+      logoUrl: body.logoUrl || "",
+  shopFrontImageUrl: body.shopFrontImageUrl || "",
       category: body.category || "",
       description: body.description || "",
       services: body.services || [],
