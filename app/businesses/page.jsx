@@ -6,15 +6,35 @@ import Business from "@/models/Business";
 
 export const dynamic = "force-dynamic";
 
-export default async function BusinessesPage() {
+export default async function BusinessesPage({ searchParams }) {
   await connectDB();
+  const params = await searchParams;
+  
 
-  const businesses = await Business.find()
-    .select(
-      "name slug description city phone category logoUrl shopFrontImageUrl rating reviewCount"
-    )
-    .sort({ createdAt: -1 })
-    .lean();
+  const keyword = params?.keyword?.trim() || "";
+const city = params?.city?.trim() || "";
+
+const query = {};
+
+if (keyword) {
+  query.$or = [
+    { name: { $regex: keyword, $options: "i" } },
+    { category: { $regex: keyword, $options: "i" } },
+    { description: { $regex: keyword, $options: "i" } },
+    { services: { $regex: keyword, $options: "i" } },
+  ];
+}
+
+if (city) {
+  query.city = { $regex: city, $options: "i" };
+}
+
+const businesses = await Business.find(query)
+  .select(
+    "name slug description city phone category logoUrl shopFrontImageUrl rating reviewCount"
+  )
+  .sort({ createdAt: -1 })
+  .lean();
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
@@ -27,8 +47,35 @@ export default async function BusinessesPage() {
           Discover trusted and recently added businesses.
         </p>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {businesses.map((biz) => (
+        {(keyword || city) && (
+  <p className="mb-8 text-center text-gray-700">
+    Showing results
+    {keyword && (
+      <>
+        {" "}for <span className="font-semibold">"{keyword}"</span>
+      </>
+    )}
+    {city && (
+      <>
+        {" "}in <span className="font-semibold">{city}</span>
+      </>
+    )}
+  </p>
+)}
+
+        {businesses.length === 0 ? (
+  <div className="py-20 text-center">
+    <h2 className="text-2xl font-bold text-gray-800">
+      No businesses found
+    </h2>
+
+    <p className="mt-2 text-gray-500">
+      Try another keyword or city.
+    </p>
+  </div>
+) : (
+  <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    {businesses.map((biz) => (
             <Link
               key={biz._id.toString()}
               href={`/${biz.slug}`}
@@ -123,6 +170,7 @@ export default async function BusinessesPage() {
             </Link>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

@@ -1,16 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 export const dynamic = "force-dynamic";
 import { MapPin, Search, Star, Phone, Store, Utensils, Smartphone, Scissors } from "lucide-react";
-import { connectDB } from "@/lib/db";
-import Business from "@/models/Business";
+// import { connectDB } from "@/lib/db";
+// import Business from "@/models/Business";
 
-export const revalidate = 300;
+//export const revalidate = 300;
 
-export const metadata = {
-  title: "LocalBiz - Find Trusted Local Businesses Near You",
-  description:
-    "Discover restaurants, salons, gift shops, mobile repair services and more in your city. Search trusted local businesses near you.",
-};
+// export const metadata = {
+//   title: "LocalBiz - Find Trusted Local Businesses Near You",
+//   description:
+//     "Discover restaurants, salons, gift shops, mobile repair services and more in your city. Search trusted local businesses near you.",
+// };
 
 const categories = [
   {
@@ -41,14 +46,27 @@ const categories = [
 
 const popularCities = ["Houston", "Dallas", "Austin", "San Antonio", "Chicago", "New York"];
 
-export default async function HomePage() {
-  await connectDB();
+export default function HomePage() {
 
-  const businesses = await Business.find()
-    .select("name slug description city phone category logoUrl shopFrontImageUrl rating reviewCount")
-    .sort({ createdAt: -1 })
-    .limit(6)
-    .lean();
+  const router = useRouter();
+const [keyword, setKeyword] = useState("");
+const [city, setCity] = useState("");
+
+const [businesses, setBusinesses] = useState<any[]>([]);
+
+useEffect(() => {
+  const fetchBusinesses = async () => {
+    try {
+      const res = await fetch("/api/home-businesses");
+      const data = await res.json();
+      setBusinesses(data);
+    } catch (error) {
+      console.error("Failed to load businesses", error);
+    }
+  };
+
+  fetchBusinesses();
+}, []);
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -107,34 +125,59 @@ export default async function HomePage() {
 
               {/* Search Form */}
               <div className="mx-auto mt-10 max-w-5xl rounded-3xl bg-white p-4 shadow-2xl">
-                <form className="grid gap-3 md:grid-cols-[2fr_1fr_auto]">
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      aria-label="Search businesses or categories"
-                      placeholder="What are you looking for?"
-                      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
-                    />
-                  </div>
+                
 
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      aria-label="Search city"
-                      placeholder="City"
-                      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
-                    />
-                  </div>
+                <form
+  onSubmit={(e) => {
+    e.preventDefault();
 
-                  <button
-                    type="submit"
-                    className="h-14 rounded-2xl bg-[#FFA02E] px-8 font-semibold text-white transition hover:bg-[#f28c12] focus:outline-none focus:ring-4 focus:ring-orange-200"
-                  >
-                    Search
-                  </button>
-                </form>
+    const params = new URLSearchParams();
+
+    if (keyword.trim()) {
+      params.set("keyword", keyword.trim());
+    }
+
+    if (city.trim()) {
+      params.set("city", city.trim());
+    }
+
+    router.push(`/businesses?${params.toString()}`);
+  }}
+  className="grid gap-3 md:grid-cols-[2fr_1fr_auto]"
+>
+  <div className="relative">
+    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+
+    <input
+      type="text"
+      aria-label="Search businesses or categories"
+      placeholder="What are you looking for?"
+      value={keyword}
+      onChange={(e) => setKeyword(e.target.value)}
+      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
+    />
+  </div>
+
+  <div className="relative">
+    <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+
+    <input
+      type="text"
+      aria-label="Search city"
+      placeholder="City"
+      value={city}
+      onChange={(e) => setCity(e.target.value)}
+      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
+    />
+  </div>
+
+  <button
+    type="submit"
+    className="h-14 rounded-2xl bg-[#FFA02E] px-8 font-semibold text-white transition hover:bg-[#f28c12] focus:outline-none focus:ring-4 focus:ring-orange-200"
+  >
+    Search
+  </button>
+</form>
 
                 <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm text-gray-600">
                   <span className="font-semibold text-gray-800">Popular:</span>
@@ -243,88 +286,87 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {businesses.map((biz: any) => (
-              <Link
-                key={biz._id.toString()}
-                href={`/${biz.slug}`}
-                className="group overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-              >
-                <div className="relative h-52 bg-gradient-to-br from-green-100 to-green-200">
-                  {/* {biz.image ? (
-                    <img
-                      src={biz.image}
-                      alt={biz.name}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    />
-                  ) : ( */}
-                  {biz.shopFrontImageUrl ? (
-  <img
-    src={biz.shopFrontImageUrl}
-    alt={biz.name}
-    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-  />
-) : biz.logoUrl ? (
-  <div className="flex h-full items-center justify-center bg-white p-6">
-    <img
-      src={biz.logoUrl}
-      alt={`${biz.name} logo`}
-      className="max-h-24 max-w-[140px] object-contain"
-    />
-  </div>
-) : (
-                    <div className="flex h-full items-center justify-center text-[#468432]">
-                      <Store className="h-16 w-16" />
-                    </div>
-                  )}
-                </div>
+         <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+  {businesses.length === 0 ? (
+    <p className="col-span-full text-center text-gray-500">
+      Loading businesses...
+    </p>
+  ) : (
+    businesses.map((biz: any) => (
+      <Link
+        key={biz._id.toString()}
+        href={`/${biz.slug}`}
+        className="group overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+      >
+        <div className="relative h-52 bg-gradient-to-br from-green-100 to-green-200">
+          {biz.shopFrontImageUrl ? (
+            <img
+              src={biz.shopFrontImageUrl}
+              alt={biz.name}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            />
+          ) : biz.logoUrl ? (
+            <div className="flex h-full items-center justify-center bg-white p-6">
+              <img
+                src={biz.logoUrl}
+                alt={`${biz.name} logo`}
+                className="max-h-24 max-w-[140px] object-contain"
+              />
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center text-[#468432]">
+              <Store className="h-16 w-16" />
+            </div>
+          )}
+        </div>
 
-                <div className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-[#468432]">
-                        {biz.category || "Local Business"}
-                      </span>
+        <div className="p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-[#468432]">
+                {biz.category || "Local Business"}
+              </span>
 
-                      <h3 className="mt-3 text-2xl font-bold text-gray-900 transition group-hover:text-[#468432]">
-                        {biz.name}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <p className="mt-4 line-clamp-2 text-sm leading-6 text-gray-600">
-                    {biz.description}
-                  </p>
-
-                  <div className="mt-5 flex items-center gap-2 text-sm text-amber-500">
-                    <Star className="h-4 w-4 fill-current" />
-                    <span className="font-semibold text-gray-900">
-                      {biz.rating || "4.8"}
-                    </span>
-                    <span className="text-gray-500">
-                      ({biz.reviewCount || "24"} reviews)
-                    </span>
-                  </div>
-
-                  <div className="mt-5 space-y-3 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-[#468432]" />
-                      <span>{biz.city}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-[#468432]" />
-                      <span>{biz.phone}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 inline-flex items-center font-semibold text-[#468432] transition group-hover:translate-x-1">
-                    View Details →
-                  </div>
-                </div>
-              </Link>
-            ))}
+              <h3 className="mt-3 text-2xl font-bold text-gray-900 transition group-hover:text-[#468432]">
+                {biz.name}
+              </h3>
+            </div>
           </div>
+
+          <p className="mt-4 line-clamp-2 text-sm leading-6 text-gray-600">
+            {biz.description}
+          </p>
+
+          <div className="mt-5 flex items-center gap-2 text-sm text-amber-500">
+            <Star className="h-4 w-4 fill-current" />
+            <span className="font-semibold text-gray-900">
+              {biz.rating || "4.8"}
+            </span>
+            <span className="text-gray-500">
+              ({biz.reviewCount || "24"} reviews)
+            </span>
+          </div>
+
+          <div className="mt-5 space-y-3 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-[#468432]" />
+              <span>{biz.city}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-[#468432]" />
+              <span>{biz.phone}</span>
+            </div>
+          </div>
+
+          <div className="mt-6 inline-flex items-center font-semibold text-[#468432] transition group-hover:translate-x-1">
+            View Details →
+          </div>
+        </div>
+      </Link>
+    ))
+  )}
+</div>
         </section>
 
         {/* SEO CONTENT */}

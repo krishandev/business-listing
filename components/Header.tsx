@@ -46,14 +46,14 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Desktop Right Side */}
+       
         <div className="hidden items-center gap-3 md:flex">
-          {/* Search */}
-          <input
+        
+          {/* <input
             type="text"
             placeholder="Search businesses..."
             className="rounded-md px-3 py-1 text-black outline-none"
-          />
+          /> */}
 
           {/* Add Business */}
           <Link href="/create-business">
@@ -134,11 +134,11 @@ export default function Header() {
           </Link>
 
           {/* Mobile Search */}
-          <input
+          {/* <input
             type="text"
             placeholder="Search businesses..."
             className="w-full rounded-md border px-3 py-2"
-          />
+          /> */}
 
           {/* Add Business */}
           <Link href="/create-business">

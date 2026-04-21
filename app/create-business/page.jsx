@@ -2,6 +2,84 @@
 
 import { useState } from "react";
 
+const businessCategories = [
+  "Restaurant",
+  "Salon",
+  "Gift Shop",
+  "Mobile Repair",
+  "Home Services",
+  "Plumber",
+  "Electrician",
+  "Painter",
+  "Carpenter",
+  "HVAC Service",
+  "Automotive",
+  "Car Repair",
+  "Car Wash",
+  "Tyre Shop",
+  "Health & Medical",
+  "Doctor",
+  "Dentist",
+  "Clinic",
+  "Pharmacy",
+  "Hospital",
+  "Education",
+  "School",
+  "College",
+  "Coaching Center",
+  "Tutor",
+  "Fitness",
+  "Gym",
+  "Yoga Studio",
+  "Personal Trainer",
+  "Professional Services",
+  "Lawyer",
+  "Accountant",
+  "Consultant",
+  "Real Estate",
+  "Shopping",
+  "Clothing Store",
+  "Shoe Store",
+  "Jewelry Store",
+  "Furniture Store",
+  "Repair Services",
+  "Appliance Repair",
+  "Computer Repair",
+  "AC Repair",
+  "Beauty & Spa",
+  "Spa",
+  "Nail Salon",
+  "Barber Shop",
+  "Pet Services",
+  "Pet Shop",
+  "Veterinary Clinic",
+  "Pet Grooming",
+  "Travel Agency",
+  "Hotel",
+  "Taxi Service",
+  "Photography",
+  "Event Planner",
+  "Wedding Services",
+  "Catering",
+  "Bakery",
+  "Coffee Shop",
+  "Grocery Store",
+  "Supermarket",
+  "Book Store",
+  "Toy Store",
+  "Electronics Store",
+  "Mobile Shop",
+  "Courier Service",
+  "Laundry",
+  "Dry Cleaning",
+  "Security Services",
+  "Internet Provider",
+  "Marketing Agency",
+  "Web Design",
+  "Digital Marketing",
+  "Other",
+];
+
 export default function CreateBusiness() {
   const [form, setForm] = useState({
     name: "",
@@ -206,20 +284,22 @@ export default function CreateBusiness() {
           />
 
           {/* Category */}
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            required
-            className="rounded-md border p-3 focus:ring-2 focus:ring-[#9AD872]"
-          >
-            <option value="">Select Category</option>
-            <option value="Gift Shop">Gift Shop</option>
-            <option value="Restaurant">Restaurant</option>
-            <option value="Mobile Repair">Mobile Repair</option>
-            <option value="Salon">Salon</option>
-            
-          </select>
+         
+         <select
+  name="category"
+  value={form.category}
+  onChange={handleChange}
+  required
+  className="rounded-md border p-3 focus:ring-2 focus:ring-[#9AD872]"
+>
+  <option value="">Select Category</option>
+
+  {businessCategories.map((category) => (
+    <option key={category} value={category}>
+      {category}
+    </option>
+  ))}
+</select>
 
           {/* Services */}
           <input
