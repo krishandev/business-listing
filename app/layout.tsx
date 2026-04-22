@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 
 import "./globals.css";
 
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,9 +19,54 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "LocalBiz",
-  description: "Find trusted local businesses near you",
+  metadataBase: new URL(siteUrl),
+
+  title: {
+    default: "LocalBiz - Find Trusted Local Businesses Near You",
+    template: "%s | LocalBiz",
+  },
+
+  description:
+    "Find trusted local businesses, restaurants, salons, gift shops, mobile repair services and more across top cities.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  openGraph: {
+    title: "LocalBiz - Find Trusted Local Businesses Near You",
+    description:
+      "Find trusted local businesses, restaurants, salons, gift shops and more.",
+    url: siteUrl,
+    siteName: "LocalBiz",
+    type: "website",
+    images: [
+      {
+        url: `${siteUrl}/og-home.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "LocalBiz Home",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "LocalBiz - Find Trusted Local Businesses Near You",
+    description:
+      "Find trusted local businesses, restaurants, salons, gift shops and more.",
+    images: [`${siteUrl}/og-home.jpg`],
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +86,27 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
 
           <Footer />
+
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "LocalBiz",
+      url:
+        process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${
+          process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+        }/businesses?keyword={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    }),
+  }}
+/>
+
         </body>
       </html>
     </ClerkProvider>

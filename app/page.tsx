@@ -18,6 +18,8 @@ import HeroSection from "@/components/HeroSection";
 //     "Discover restaurants, salons, gift shops, mobile repair services and more in your city. Search trusted local businesses near you.",
 // };
 
+
+
 const categories = [
   {
     name: "Gift Shops",

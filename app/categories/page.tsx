@@ -239,11 +239,15 @@ const categories = [
   },
 ];
 
-export const metadata = {
+import { generateSEO } from "@/lib/seo";
+
+export const metadata = generateSEO({
   title: "Business Categories | LocalBiz",
   description:
-    "Browse all business categories on LocalBiz including restaurants, salons, gift shops, mobile repair and more.",
-};
+    "Browse business categories including restaurants, salons, gift shops and more.",
+  path: "/categories",
+  image: "/og-categories.jpg",
+});
 
 export default function CategoriesPage() {
   return (

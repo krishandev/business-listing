@@ -100,11 +100,15 @@ const cities = [
   },
 ];
 
-export const metadata = {
-  title: "Cities | LocalBiz",
+import { generateSEO } from "@/lib/seo";
+
+export const metadata = generateSEO({
+  title: "Cities We Serve | LocalBiz",
   description:
-    "Browse local businesses by city. Find trusted restaurants, salons, repair shops and more in your city.",
-};
+    "Explore local businesses in top cities including New York, Los Angeles, Chicago, Houston, Dallas and more.",
+  path: "/cities",
+  image: "/og-cities.jpg",
+});
 
 export default function CitiesPage() {
   return (

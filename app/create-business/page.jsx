@@ -80,6 +80,8 @@ const businessCategories = [
   "Other",
 ];
 
+
+
 export default function CreateBusiness() {
   const [form, setForm] = useState({
     name: "",

@@ -8,11 +8,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-export const metadata = {
-  title: "About LocalBiz | Find Trusted Local Businesses",
+import { generateSEO } from "@/lib/seo";
+
+export const metadata = generateSEO({
+  title: "About Us | LocalBiz",
   description:
-    "Learn more about LocalBiz and how we help people discover trusted local businesses while helping business owners grow online.",
-};
+    "Learn more about LocalBiz, our mission, and how we help people discover trusted local businesses near them.",
+  path: "/about",
+  image: "/og-about.jpg",
+});
 
 const stats = [
   {

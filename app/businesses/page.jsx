@@ -6,6 +6,16 @@ import Business from "@/models/Business";
 
 export const dynamic = "force-dynamic";
 
+import { generateSEO } from "@/lib/seo";
+
+export const metadata = generateSEO({
+  title: "Browse All Businesses | LocalBiz",
+  description:
+    "Browse all listed businesses including restaurants, salons, gift shops, mobile repair services and more on LocalBiz.",
+  path: "/businesses",
+  image: "/og-businesses.jpg",
+});
+
 export default async function BusinessesPage({ searchParams }) {
   await connectDB();
   const params = await searchParams;
