@@ -56,8 +56,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-3">Contact</h3>
             <p className="text-sm">Email: support@localbiz.com</p>
-            <p className="text-sm">Phone: +91 9876543210</p>
-            <p className="text-sm">Address: India</p>
+           
 
             {/* Social Icons */}
             <div className="flex gap-4 mt-3">

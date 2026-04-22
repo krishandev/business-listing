@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 export const dynamic = "force-dynamic";
 import { MapPin, Search, Star, Phone, Store, Utensils, Smartphone, Scissors } from "lucide-react";
+import HeroSection from "@/components/HeroSection";
 // import { connectDB } from "@/lib/db";
 // import Business from "@/models/Business";
 
@@ -108,109 +109,8 @@ useEffect(() => {
 
       <main className="bg-gray-50 text-gray-900">
         {/* HERO */}
-        <section className="bg-gradient-to-br from-[#356B27] via-[#468432] to-[#6AB04C] text-white">
-          <div className="mx-auto max-w-7xl px-4 py-20 md:py-28 text-center">
-            <div className="mx-auto max-w-4xl">
-              <span className="inline-flex items-center rounded-full bg-white/15 px-4 py-1 text-sm font-medium backdrop-blur-sm border border-white/20">
-                2,500+ Trusted Businesses Listed
-              </span>
-
-              <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
-                Find Trusted Local Businesses in Your City
-              </h1>
-
-              <p className="mx-auto mt-6 max-w-2xl text-lg text-green-50 md:text-xl">
-                Search restaurants, salons, gift shops, mobile repair services and more across top cities.
-              </p>
-
-              {/* Search Form */}
-              <div className="mx-auto mt-10 max-w-5xl rounded-3xl bg-white p-4 shadow-2xl">
-                
-
-                <form
-  onSubmit={(e) => {
-    e.preventDefault();
-
-    const params = new URLSearchParams();
-
-    if (keyword.trim()) {
-      params.set("keyword", keyword.trim());
-    }
-
-    if (city.trim()) {
-      params.set("city", city.trim());
-    }
-
-    router.push(`/businesses?${params.toString()}`);
-  }}
-  className="grid gap-3 md:grid-cols-[2fr_1fr_auto]"
->
-  <div className="relative">
-    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-
-    <input
-      type="text"
-      aria-label="Search businesses or categories"
-      placeholder="What are you looking for?"
-      value={keyword}
-      onChange={(e) => setKeyword(e.target.value)}
-      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
-    />
-  </div>
-
-  <div className="relative">
-    <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-
-    <input
-      type="text"
-      aria-label="Search city"
-      placeholder="City"
-      value={city}
-      onChange={(e) => setCity(e.target.value)}
-      className="h-14 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none transition focus:border-[#468432] focus:ring-4 focus:ring-green-100"
-    />
-  </div>
-
-  <button
-    type="submit"
-    className="h-14 rounded-2xl bg-[#FFA02E] px-8 font-semibold text-white transition hover:bg-[#f28c12] focus:outline-none focus:ring-4 focus:ring-orange-200"
-  >
-    Search
-  </button>
-</form>
-
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm text-gray-600">
-                  <span className="font-semibold text-gray-800">Popular:</span>
-                  <Link href="/houston/restaurants" className="rounded-full bg-gray-100 px-3 py-1 hover:bg-gray-200">
-                    Restaurants in Houston
-                  </Link>
-                  <Link href="/dallas/salons" className="rounded-full bg-gray-100 px-3 py-1 hover:bg-gray-200">
-                    Salons in Dallas
-                  </Link>
-                  <Link href="/austin/mobile-repair" className="rounded-full bg-gray-100 px-3 py-1 hover:bg-gray-200">
-                    Mobile Repair in Austin
-                  </Link>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/create-business"
-                  className="rounded-2xl bg-[#FFA02E] px-8 py-4 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#f28c12]"
-                >
-                  Add Your Business
-                </Link>
-
-                <Link
-                  href="/businesses"
-                  className="rounded-2xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-                >
-                  Browse Businesses
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        
+        <HeroSection/>
 
         {/* CATEGORIES */}
         <section className="mx-auto max-w-7xl px-4 py-20">
@@ -268,7 +168,13 @@ useEffect(() => {
                 </Link>
               ))}
             </div>
+            <div className=" py-10">
+              <Link href="/cities" className=" hidden text-sm font-semibold text-[#468432] hover:underline md:block">
+              View All Cities →
+            </Link>
+            </div>
           </div>
+          
         </section>
 
         {/* FEATURED BUSINESSES */}

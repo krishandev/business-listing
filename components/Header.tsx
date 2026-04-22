@@ -13,7 +13,7 @@ import {
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#468432] text-white shadow-md">
@@ -75,6 +75,8 @@ export default function Header() {
                   </button>
                 </SignInButton>
 
+
+
                 <SignUpButton mode="modal">
                   <button className="rounded-md bg-white px-4 py-2 font-semibold text-[#468432] hover:bg-[#FFEF91]">
                     Sign Up
@@ -89,6 +91,16 @@ export default function Header() {
                 >
                   My Businesses
                 </Link>
+
+                {user?.id === "user_3Cc24rrgLFC5P7f9OESgmEW1v3B" && (
+  <Link
+    href="/admin"
+    className="rounded-md bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600"
+  >
+    Admin
+  </Link>
+)}
+
 
                 <UserButton>
   <UserButton.MenuItems>
@@ -174,9 +186,22 @@ export default function Header() {
                   </button>
                 </Link>
 
+                {user?.id === "user_3Cc24rrgLFC5P7f9OESgmEW1v3B" && (
+  <Link href="/admin">
+    <button className="w-full rounded-md bg-red-500 py-2 font-semibold text-white">
+      Admin Dashboard
+    </button>
+  </Link>
+)}
+
                 <div className="flex justify-center">
-                  <UserButton afterSignOutUrl="/" />
-                </div>
+  <UserButton>
+    <UserButton.MenuItems>
+      <UserButton.Action label="manageAccount" />
+      <UserButton.Action label="signOut" />
+    </UserButton.MenuItems>
+  </UserButton>
+</div>
               </div>
             )}
           </ClerkLoaded>
